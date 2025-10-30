@@ -131,7 +131,7 @@ export default function App() {
     if (!description) return;
 
     try {
-      const res = await axios.post("http://127.0.0.1:8000/generate_workflow", {
+      const res = await axios.post("https://workflow-assignment.onrender.com/generate_workflow", {
         description,
       });
 
