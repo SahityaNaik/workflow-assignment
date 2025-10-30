@@ -10,7 +10,6 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import axios from "axios";
 
-// ✅ Moved outside component to prevent re-creation warning
 const nodeTypesList = [
   { type: "start", label: "Start" },
   { type: "process", label: "Process" },
@@ -29,14 +28,14 @@ export default function App() {
     []
   );
 
-  // 🎯 Handle drag start
+  // Handle drag start
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";
     setDraggingNode(nodeType);
   };
 
-  // ✅ Handle drop position
+  // Handle drop position
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -50,7 +49,6 @@ export default function App() {
         y: event.clientY - reactFlowBounds.top,
       };
 
-      // ✅ Force type to "default" to silence missing node type warnings
       const newNode = {
         id: `${type}-${+new Date()}`,
         type: "default",
@@ -70,19 +68,23 @@ export default function App() {
     event.dataTransfer.dropEffect = "move";
   };
 
-  // 🖋️ Select node for editing
+  // Select node for editing
   const onNodeClick = (_, node) => {
     setSelectedNode(node);
   };
 
-  // ✏️ Handle node edits
+  // Handle node edits
   const handleNodeChange = (field, value) => {
     setNodes((nds) =>
       nds.map((n) =>
         n.id === selectedNode.id
           ? {
               ...n,
-              data: { ...n.data, [field]: value, label: n.data.name || n.data.label },
+              data: {
+                ...n.data,
+                [field]: value,
+                label: n.data.name || n.data.label,
+              },
               style:
                 field === "color"
                   ? { ...n.style, backgroundColor: value }
@@ -91,10 +93,13 @@ export default function App() {
           : n
       )
     );
-    setSelectedNode((prev) => ({ ...prev, data: { ...prev.data, [field]: value } }));
+    setSelectedNode((prev) => ({
+      ...prev,
+      data: { ...prev.data, [field]: value },
+    }));
   };
 
-  // 📤 Export workflow
+  // Export workflow
   const handleExport = () => {
     const data = { nodes, edges };
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -107,7 +112,7 @@ export default function App() {
     a.click();
   };
 
-  // 📥 Import workflow
+  // Import workflow
   const handleImport = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -120,7 +125,7 @@ export default function App() {
     reader.readAsText(file);
   };
 
-  // 🤖 Generate workflow (AI)
+  // Generate workflow (AI)
   const handleGenerate = async () => {
     const description = prompt("Enter workflow description:");
     if (!description) return;
@@ -130,7 +135,6 @@ export default function App() {
         description,
       });
 
-      // Backend returns: { workflow: { nodes: [...], edges: [...] } }
       let workflow = res.data.workflow;
 
       // If the AI returned a string (JSON text), parse it
@@ -147,7 +151,7 @@ export default function App() {
       const newNodes = (workflow.nodes || []).map((n, i) => ({
         ...n,
         id: n.id || `n${i}`,
-        type: "default", // ✅ force to default to avoid missing type warning
+        type: "default",
         position: n.position || { x: 100 + i * 150, y: 100 + i * 100 },
         data: { label: n.data?.label || n.id || `Node ${i}` },
         style: {
