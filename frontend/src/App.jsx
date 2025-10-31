@@ -240,7 +240,7 @@ export default function App() {
           <div className="flex justify-between space-x-2 mb-3">
             <button
               onClick={handleExport}
-              className="flex-1 bg-green-500 text-white px-2 py-2 rounded hover:bg-green-600"
+              className="flex-1 bg-green-500 text-white px-2 py-2 rounded cursor-pointer hover:bg-green-600"
             >
               Export
             </button>
@@ -252,7 +252,7 @@ export default function App() {
 
             <button
               onClick={handleClearCanvas}
-              className="flex-1 bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600"
+              className="flex-1 bg-red-500 text-white px-2 py-2 rounded cursor-pointer hover:bg-red-600"
             >
               Clear
             </button>
@@ -261,7 +261,7 @@ export default function App() {
           <div className="flex justify-center">
             <button
               onClick={handleGenerate}
-              className="bg-purple-500 text-white px-3 py-2 rounded w-4/5 hover:bg-purple-600"
+              className="bg-purple-500 text-white px-3 py-2 rounded w-4/5 cursor-pointer hover:bg-purple-600"
             >
               Generate AI Workflow
             </button>
