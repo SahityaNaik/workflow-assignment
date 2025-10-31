@@ -47,7 +47,7 @@ This project combines a **React Flow frontend** and a **FastAPI backend** powere
 
 Follow these steps to run both the frontend (React Flow app) and backend (FastAPI + PydanticAI) locally.
 
-## 1. Clone the Repository
+### 1. Clone the Repository
 git clone https://github.com/SahityaNaik/workflow-assignment.git  
 cd workflow-assignment
 
@@ -79,7 +79,7 @@ http://127.0.0.1:8000
 
 ### Test in browser or Postman
 GET http://127.0.0.1:8000/
-# Expected response:
+### Expected response:
 {"message": "Backend is running!"}
 
 ---
