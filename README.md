@@ -1,4 +1,4 @@
-# 🧠 AI Workflow Builder (React Flow + FastAPI + PydanticAI)
+# AI Workflow Builder (React Flow + FastAPI + PydanticAI)
 
 An interactive **workflow builder** that allows users to design, edit, and visualize workflows manually or generate them automatically using AI.  
 This project combines a **React Flow frontend** and a **FastAPI backend** powered by **PydanticAI** and **Cohere’s LLM**.
@@ -58,82 +58,63 @@ cd workflow-builder
 
 ---
 
-### 2. Setup Backend (FastAPI + PydanticAI)
+## 2. Setup Backend (FastAPI + PydanticAI)
 
-# Navigate to backend directory
+### Navigate to backend directory
 cd backend
 
-# Create and activate a virtual environment
+### Create and activate a virtual environment
 python -m venv venv
-# For macOS/Linux:
+### For macOS/Linux:
 source venv/bin/activate
-# For Windows:
+### For Windows:
 venv\Scripts\activate
 
-# Install dependencies
+### Install dependencies
 pip install -r requirements.txt
 
-# Create a .env file inside backend directory
+### Create a .env file inside backend directory
 CO_API_KEY=your_cohere_api_key
 
-# Start the FastAPI server
+### Start the FastAPI server
 uvicorn main:app --reload
 
-# Backend will be running at:
+### Backend will be running at:
 http://127.0.0.1:8000
 
-# Test in browser or Postman
+### Test in browser or Postman
 GET http://127.0.0.1:8000/
 # Expected response:
 {"message": "Backend is running!"}
 
 ---
 
-### 3. Setup Frontend (React Flow App)
+## 3. Setup Frontend (React Flow App)
 
-# Navigate to frontend directory
+### Navigate to frontend directory
 cd ../frontend
 
-# Install dependencies
+### Install dependencies
 npm install
 
-# (Optional) Create a .env file if your backend URL differs
+### (Optional) Create a .env file if your backend URL differs
 REACT_APP_API_URL=http://127.0.0.1:8000
 
-# Start the frontend development server
+### Start the frontend development server
 npm start
 
-# Frontend will be running at:
+### Frontend will be running at:
 http://localhost:3000
 
 ---
 
-### 4. Connect Frontend & Backend
+## 4. Connect Frontend & Backend
 
-# Make sure both servers are running.
-# The frontend sends POST requests to:
+### Make sure both servers are running.
+### The frontend sends POST requests to:
 http://127.0.0.1:8000/generate_workflow
 
-# The backend responds with structured workflow JSON (nodes + edges).
+### The backend responds with structured workflow JSON (nodes + edges).
 
 ---
-
-### 5. Test Backend Separately (Optional)
-
-curl -X POST http://127.0.0.1:8000/generate_workflow \
-  -H "Content-Type: application/json" \
-  -d '{"description": "A process where a document is reviewed and approved"}'
-
-# Expected Response
-{
-  "workflow": {
-    "nodes": [...],
-    "edges": [...]
-  }
-}
-
----
-
-✅ Done!  
-You now have the full-stack workflow builder running locally — frontend at http://localhost:3000 and backend at http://127.0.0.1:8000.
 
