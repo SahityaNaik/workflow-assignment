@@ -7,10 +7,8 @@ This project combines a **React Flow frontend** and a **FastAPI backend** powere
 
 ## 🚀 Live Demo Links
 
-- **Frontend (React Flow App):** [https://your-frontend-url.vercel.app](https://your-frontend-url.vercel.app)
+- **Frontend (React Flow App):** [https://workflow-assignment-ekxy.vercel.app/](https://workflow-assignment-ekxy.vercel.app/)
 - **Backend API (FastAPI):** [https://workflow-assignment.onrender.com](https://workflow-assignment.onrender.com)
-
-> Both deployments are publicly accessible as required.
 
 ---
 
