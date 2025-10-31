@@ -1,7 +1,7 @@
 # AI Workflow Builder (React Flow + FastAPI + PydanticAI)
 
 An interactive **workflow builder** that allows users to design, edit, and visualize workflows manually or generate them automatically using AI.  
-This project combines a **React Flow frontend** and a **FastAPI backend** powered by **PydanticAI** and **Cohere’s LLM**.
+This project combines a **React Flow frontend** and a **FastAPI backend** powered by **PydanticAI**.
 
 ---
 
@@ -17,14 +17,11 @@ This project combines a **React Flow frontend** and a **FastAPI backend** powere
 ### 🖥️ Frontend (React Flow + Tailwind)
 - Drag-and-drop **workflow node types** (Start, Process, Decision, End)
 - **Editable node properties:** name, description, category, color
-- **Validation rules:**
-  - Start node → no incoming edges
-  - Decision node → max 2 outgoing edges
 - **Canvas tools:** zoom, pan, mini-map
 - **Export / Import:** save and load workflows as JSON
 - **AI Workflow Generation:** describe a process in text → AI auto-generates the flow
 - **Persistent data:** nodes/edges auto-saved in localStorage
-- **Clear Canvas** button for starting fresh
+- **Clear** button for starting fresh
 
 ### ⚙️ Backend (FastAPI + PydanticAI + Cohere)
 - `/generate_workflow` POST endpoint:
@@ -40,7 +37,7 @@ This project combines a **React Flow frontend** and a **FastAPI backend** powere
 | Layer | Technology |
 |--------|-------------|
 | Frontend | React, React Flow, Tailwind CSS, Axios |
-| Backend | FastAPI, PydanticAI, Cohere API |
+| Backend | FastAPI, PydanticAI |
 | Deployment | Frontend → Vercel, Backend → Render |
 | Language | Python (backend), JavaScript (frontend) |
 
@@ -52,7 +49,7 @@ Follow these steps to run both the frontend (React Flow app) and backend (FastAP
 
 ### 1. Clone the Repository
 git clone https://github.com/yourusername/workflow-builder.git
-cd workflow-builder
+cd workflow-assignment
 
 ---
 
@@ -71,7 +68,7 @@ venv\Scripts\activate
 ### Install dependencies
 pip install -r requirements.txt
 
-### Create a .env file inside backend directory
+### Create a .env file inside backend directory (if required)
 CO_API_KEY=your_cohere_api_key
 
 ### Start the FastAPI server
@@ -94,9 +91,6 @@ cd ../frontend
 
 ### Install dependencies
 npm install
-
-### (Optional) Create a .env file if your backend URL differs
-REACT_APP_API_URL=http://127.0.0.1:8000
 
 ### Start the frontend development server
 npm start
