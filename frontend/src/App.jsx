@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -23,10 +23,42 @@ export default function App() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [draggingNode, setDraggingNode] = useState(null);
 
+  // Validation Rules + Edge Connect Handler
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    []
+    (params) => {
+      const sourceNode = nodes.find((n) => n.id === params.source);
+      const targetNode = nodes.find((n) => n.id === params.target);
+
+      // Rule 1: Start node cannot have incoming edges
+      if (targetNode?.type === "start") {
+        alert("Start node cannot have incoming edges!");
+        return;
+      }
+
+      // Rule 2: Decision node can only have 2 outgoing edges
+      const outgoing = edges.filter((e) => e.source === sourceNode?.id);
+      if (sourceNode?.type === "decision" && outgoing.length >= 2) {
+        alert("Decision node can only have 2 outgoing edges!");
+        return;
+      }
+
+      setEdges((eds) => addEdge(params, eds));
+    },
+    [nodes, edges]
   );
+
+  // Persist nodes & edges in localStorage
+  useEffect(() => {
+    const savedNodes = JSON.parse(localStorage.getItem("workflow-nodes") || "[]");
+    const savedEdges = JSON.parse(localStorage.getItem("workflow-edges") || "[]");
+    if (savedNodes.length > 0) setNodes(savedNodes);
+    if (savedEdges.length > 0) setEdges(savedEdges);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("workflow-nodes", JSON.stringify(nodes));
+    localStorage.setItem("workflow-edges", JSON.stringify(edges));
+  }, [nodes, edges]);
 
   // Handle drag start
   const onDragStart = (event, nodeType) => {
@@ -131,13 +163,13 @@ export default function App() {
     if (!description) return;
 
     try {
-      const res = await axios.post("https://workflow-assignment.onrender.com/generate_workflow", {
-        description,
-      });
+      const res = await axios.post(
+        "https://workflow-assignment.onrender.com/generate_workflow",
+        { description }
+      );
 
       let workflow = res.data.workflow;
 
-      // If the AI returned a string (JSON text), parse it
       if (typeof workflow === "string") {
         try {
           workflow = JSON.parse(workflow);
@@ -168,45 +200,72 @@ export default function App() {
 
       setNodes(newNodes);
       setEdges(newEdges);
-      alert("✅ Workflow generated successfully!");
+      alert("Workflow generated successfully!");
     } catch (err) {
       console.error("AI Workflow generation failed:", err);
-      alert("❌ Error generating workflow. Ensure backend is running.");
+      alert("Error generating workflow. Ensure backend is running.");
+    }
+  };
+
+  // Clear Canvas Handler
+  const handleClearCanvas = () => {
+    if (window.confirm("Clear all nodes and edges?")) {
+      setNodes([]);
+      setEdges([]);
+      localStorage.removeItem("workflow-nodes");
+      localStorage.removeItem("workflow-edges");
     }
   };
 
   return (
     <div className="flex h-screen w-screen">
       {/* Left Panel */}
-      <div className="w-1/5 bg-gray-100 border-r p-4">
+      <div className="w-1/5 bg-gray-100 border-r p-4 flex flex-col">
         <h2 className="font-bold mb-4">Node Types</h2>
-        {nodeTypesList.map((n) => (
-          <div
-            key={n.type}
-            draggable
-            onDragStart={(e) => onDragStart(e, n.type)}
-            className="p-2 mb-2 bg-blue-100 rounded-md text-center cursor-move hover:bg-blue-200"
-          >
-            {n.label}
+        <div className="space-y-2 mb-6">
+          {nodeTypesList.map((n) => (
+            <div
+              key={n.type}
+              draggable
+              onDragStart={(e) => onDragStart(e, n.type)}
+              className="p-2 bg-blue-100 rounded-md text-center cursor-move hover:bg-blue-200"
+            >
+              {n.label}
+            </div>
+          ))}
+        </div>
+
+        {/* Buttons Section */}
+        <div className="mt-4">
+          <div className="flex justify-between space-x-2 mb-3">
+            <button
+              onClick={handleExport}
+              className="flex-1 bg-green-500 text-white px-2 py-2 rounded hover:bg-green-600"
+            >
+              Export
+            </button>
+
+            <label className="flex-1 bg-blue-500 text-white px-2 py-2 rounded text-center cursor-pointer hover:bg-blue-600">
+              Import
+              <input type="file" hidden onChange={handleImport} />
+            </label>
+
+            <button
+              onClick={handleClearCanvas}
+              className="flex-1 bg-red-500 text-white px-2 py-2 rounded hover:bg-red-600"
+            >
+              Clear
+            </button>
           </div>
-        ))}
-        <div className="mt-4 space-x-2">
-          <button
-            onClick={handleExport}
-            className="bg-green-500 text-white px-3 py-1 rounded"
-          >
-            Export
-          </button>
-          <label className="bg-blue-500 text-white px-3 py-1 rounded cursor-pointer">
-            Import
-            <input type="file" hidden onChange={handleImport} />
-          </label>
-          <button
-            onClick={handleGenerate}
-            className="bg-purple-500 text-white px-3 py-1 rounded mt-2"
-          >
-            Generate AI Workflow
-          </button>
+
+          <div className="flex justify-center">
+            <button
+              onClick={handleGenerate}
+              className="bg-purple-500 text-white px-3 py-2 rounded w-4/5 hover:bg-purple-600"
+            >
+              Generate AI Workflow
+            </button>
+          </div>
         </div>
       </div>
 
